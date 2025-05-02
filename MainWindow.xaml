@@ -1,0 +1,68 @@
+﻿<Window x:Class="BinaryGrid.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BinaryGrid"
+        mc:Ignorable="d"
+        Title="BinaryCalculator" Height="450" Width="800">
+    <!-- ✅ 正确写法：InputBindings 作为子元素 -->
+    <Window.InputBindings>
+        <!-- 在此定义所有 KeyBinding -->
+        <KeyBinding Key="D1" Command="{Binding Buttons[0].ClickCommand}"/>
+        <KeyBinding Key="D2" Command="{Binding Buttons[1].ClickCommand}"/>
+        <KeyBinding Key="D3" Command="{Binding Buttons[2].ClickCommand}"/>
+        <KeyBinding Key="D4" Command="{Binding Buttons[3].ClickCommand}"/>
+        <KeyBinding Key="D5" Command="{Binding Buttons[4].ClickCommand}"/>
+        <KeyBinding Key="D6" Command="{Binding Buttons[5].ClickCommand}"/>
+        <KeyBinding Key="D7" Command="{Binding Buttons[6].ClickCommand}"/>
+        <KeyBinding Key="D8" Command="{Binding Buttons[7].ClickCommand}"/>
+
+
+        <!-- 其他快捷键... -->
+    </Window.InputBindings>
+    <Grid>
+
+        <TextBlock Text="{Binding SomeText}" 
+                 HorizontalAlignment="Center"
+                  VerticalAlignment="Bottom"
+
+                   
+                   FontSize="40"
+                   Margin="55"
+                />
+
+        <!-- 设置 DataContext（假设已在代码中绑定 MainViewModel） -->
+
+    <ItemsControl ItemsSource="{Binding Buttons}">
+        <ItemsControl.ItemsPanel>
+            <!-- 使用 UniformGrid 自动排列按钮 -->
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="8" Rows="1"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <!-- 定义单个按钮的模板 -->
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                    <Button Content="{Binding Text}"
+                        Command="{Binding ClickCommand}"
+                        Background="{Binding BackgroundColor}"
+                        FontSize="40"
+                        Width="80" Height="80"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <!-- 绑定快捷键（如 F1-F8） -->
+                    </Button>
+                </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+       <TextBlock Text="{Binding HexText}" 
+           HorizontalAlignment="Center"
+                  VerticalAlignment="Top"
+            FontFamily="Microsoft Sans Serif"
+             FontSize="60"
+             Margin="30"
+          />
+    </Grid>
+</Window>
