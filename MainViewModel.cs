@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace BinaryGrid.Model
@@ -20,6 +21,32 @@ namespace BinaryGrid.Model
 
         private string _hexText;
 
+
+        // 初始值确保必须选中一个模式
+        private ModeType _selectedMode = ModeType.SignMagnitude;
+
+        public ModeType SelectedMode
+        {
+            get => _selectedMode;
+            set
+            {
+                if (_selectedMode != value)
+                {
+                    _selectedMode = value;
+                    OnPropertyChanged(nameof(SelectedMode));
+                    if (value == ModeType.SignMagnitude)
+                    {
+                        Buttons[0].Number = 128;
+                    }
+                    else if (value == ModeType.TwoComplement)
+                    {
+                        Buttons[0].Number = -128;
+                    }
+                }
+
+            }
+        }
+        //十六进制显示文字
         public string HexText
         {
             get => _hexText;
@@ -41,6 +68,7 @@ namespace BinaryGrid.Model
         }
         public MainViewModel()
         {
+
             SomeText = "Start to use";
             // 订阅消息
             Messenger.Default.Register<UpdateSomeTextMessage>(this, message =>
@@ -55,7 +83,7 @@ namespace BinaryGrid.Model
                 var button = new ButtonModel
                 {
                     Id = i,
-                    Text = $"{256 >> i}",
+                    Number = 256 >> i,
                     BackgroundColor = Brushes.Red,
                 };
                 button.PropertyChanged += OnButtonPropertyChanged; // 监听属性变化
@@ -77,17 +105,28 @@ namespace BinaryGrid.Model
             for (int i = 0; i < Buttons.Count; i++)
             {
                 if (Buttons[i].BackgroundColor == Brushes.Green)
-                    displayResult.Add(256 >> i+1);
+                    displayResult.Add(Buttons[i].Number);
             }
+            // 计算结果
             var process = string.Join("+", displayResult);
-            var res = displayResult.Sum();
+            var resDec = displayResult.Sum();
+            var resHex = displayResult.Select(n => Math.Abs(n)).Sum();
+            //发送信息使用MVVM将数据传递到View
             Messenger.Default.Send(new UpdateSomeTextMessage
             {
-                UpdateDecText = process + "=" + res,
-                UpdateHexText = Convert.ToString(res, 16).PadLeft(2, '0'),
+                UpdateDecText = process + "=" + resDec,
+                UpdateHexText = Convert.ToString(resHex, 16).ToUpper().PadLeft(2, '0'),
             });
-
-            
         }
+        // 切换模式的命令
+        public ICommand SetModeCommand => new RelayCommand<string>(mode =>
+        {
+            if (Enum.TryParse(mode, out ModeType newMode))
+            {
+                SelectedMode = newMode;
+            }
+        });
+
+
     }
 }

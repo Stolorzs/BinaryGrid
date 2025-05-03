@@ -15,7 +15,20 @@ namespace BinaryGrid.Model
     {
         private Brush _backgroundColor;
         // 公共属性（例如按钮显示文本、颜色等）
-        public string Text { get; set; }
+        public string Text => Number.ToString();
+
+        private int _number;
+        public int Number
+        {
+            get => _number;
+            set
+            {
+                _number = value;
+                OnPropertyChanged(nameof(Number)); // 触发 Number 更新
+                OnPropertyChanged(nameof(Text));// 触发 Text 更新
+            }
+        }
+
 
 
         // 支持变更通知的 BackgroundColor
@@ -43,7 +56,7 @@ namespace BinaryGrid.Model
         // 按钮的私有方法（可定义不同逻辑）
         private void ExecuteAction()
         {
-            if (BackgroundColor == Brushes.Red) 
+            if (BackgroundColor == Brushes.Red)
             {
                 BackgroundColor = Brushes.Green;
             }
@@ -58,7 +71,7 @@ namespace BinaryGrid.Model
                     //       MethodForButton1();
                     break;
                 case 2:
-               //     MethodForButton2();
+                    //     MethodForButton2();
                     break;
                     // ...其他按钮逻辑
             }
@@ -68,8 +81,8 @@ namespace BinaryGrid.Model
         public ICommand ClickCommand => new RelayCommand(ExecuteAction);
 
         // 示例方法
-     //   private void MethodForButton1() => MessageBox.Show("按钮1被点击");
-     //   private void MethodForButton2() => MessageBox.Show("按钮2被点击");
+        //   private void MethodForButton1() => MessageBox.Show("按钮1被点击");
+        //   private void MethodForButton2() => MessageBox.Show("按钮2被点击");
     }
 
 }

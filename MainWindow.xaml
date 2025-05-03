@@ -17,52 +17,74 @@
         <KeyBinding Key="D6" Command="{Binding Buttons[5].ClickCommand}"/>
         <KeyBinding Key="D7" Command="{Binding Buttons[6].ClickCommand}"/>
         <KeyBinding Key="D8" Command="{Binding Buttons[7].ClickCommand}"/>
-
-
         <!-- 其他快捷键... -->
     </Window.InputBindings>
-    <Grid>
+    <Window.Resources>
+        <!-- 注册转换器 -->
+        <local:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+    </Window.Resources>
 
+    <Grid>
+        <Menu VerticalAlignment="Top" >
+            <MenuItem Header="_Mode">
+                <!-- True Form 菜单项 -->
+                <MenuItem 
+                    Header="_Sign-Magnitude" 
+                    IsCheckable="False"
+                    IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=SignMagnitude}"
+                    Command="{Binding SetModeCommand}"
+                    CommandParameter="SignMagnitude"/>
+                <!-- Complement 菜单项 -->
+                <MenuItem 
+                    Header="_Two’s complement" 
+                    IsCheckable="False"
+                    IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=TwoComplement}"
+                    Command="{Binding SetModeCommand}"
+                    CommandParameter="TwoComplement"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+            </MenuItem>
+        </Menu>
         <TextBlock Text="{Binding SomeText}" 
                  HorizontalAlignment="Center"
                   VerticalAlignment="Bottom"
 
-                   
                    FontSize="40"
                    Margin="55"
                 />
 
         <!-- 设置 DataContext（假设已在代码中绑定 MainViewModel） -->
 
-    <ItemsControl ItemsSource="{Binding Buttons}">
-        <ItemsControl.ItemsPanel>
-            <!-- 使用 UniformGrid 自动排列按钮 -->
-            <ItemsPanelTemplate>
-                <UniformGrid Columns="8" Rows="1"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
+        <ItemsControl ItemsSource="{Binding Buttons}">
+            <ItemsControl.ItemsPanel>
+                <!-- 使用 UniformGrid 自动排列按钮 -->
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="8" Rows="1"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
-        <!-- 定义单个按钮的模板 -->
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
+            <!-- 定义单个按钮的模板 -->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
                     <Button Content="{Binding Text}"
                         Command="{Binding ClickCommand}"
                         Background="{Binding BackgroundColor}"
-                        FontSize="40"
+                        FontSize="35"
                         Width="80" Height="80"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
                         <!-- 绑定快捷键（如 F1-F8） -->
                     </Button>
                 </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
-       <TextBlock Text="{Binding HexText}" 
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Text="{Binding HexText}" 
            HorizontalAlignment="Center"
                   VerticalAlignment="Top"
-            FontFamily="Microsoft Sans Serif"
+            FontFamily="Monospac821 BT"
              FontSize="60"
              Margin="30"
           />
     </Grid>
+
 </Window>
